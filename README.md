@@ -8,23 +8,43 @@ A lightweight host-monitoring daemon engineered in Python to detect and mitigate
 
 ---
 
-## 📌 Architecture & Threat Detection Logic
-
 ```mermaid
 flowchart TD
-    A[Active Filesystem Telemetry] --> B[Linux procfs Event Ingestion]
-    B --> C[Shannon Entropy Calculation]
-    C --> D{Entropy > 7.5?}
-    D -- YES --> E[Send OS SIGKILL to PID]
-    D -- NO --> F[Continue Tracking]
-    E --> G[(Persistent MySQL Forensics Log)]
+    A["Active Filesystem Telemetry"] --> B["Linux /proc Event Ingestion"]
+    B --> C["Shannon Entropy Calculation"]
+    C --> D{"Entropy > 7.5?"}
+    D -->|YES| E["Send OS SIGKILL to PID"]
+    D -->|NO| F["Continue Tracking"]
+    E --> G["Persistent MySQL Forensics Log"]
+    F --> G
+```
 
-1. **Host Ingestion:** Audits active file modification threads by continuously inspecting process execution states via the Linux `/proc` filesystem interface (`procfs`).
-2. **Entropy Engine:** Computes mathematical Shannon Entropy ($H = -\sum p_i \log_2 p_i$) across sliding file-write byte streams to catch high-randomness signatures characteristic of symmetric encryption (e.g., AES, ChaCha20).
-3. **Automated Mitigation:** Executes process termination logic via native OS signals (`SIGKILL`), stopping unauthorized process execution and neutralizing simulated ransomware threats in under **100ms**.
-4. **Forensics Data Pipeline:** Records process execution paths, parent PIDs, user context, and mathematical entropy scores into a structured MySQL database for post-incident digital forensics analysis.
+### Host Ingestion
+Audits active file modification threads by continuously inspecting Linux `/proc` filesystem telemetry and process execution states.
 
----
+### Entropy Engine
+Computes Shannon Entropy
+
+\[
+H = -\sum p_i \log_2(p_i)
+\]
+
+across sliding file-write byte streams to detect high-entropy ransomware encryption activity.
+
+### Automated Mitigation
+Executes process termination using the native Linux **SIGKILL** signal, immediately stopping unauthorized encryption processes.
+
+### Forensics Data Pipeline
+Records:
+
+- Process execution path
+- Parent PID
+- User context
+- Entropy score
+- Timestamp
+- Detection status
+
+into a persistent MySQL forensic database for incident response and post-attack analysis.
 
 ## 🛠️ Tech Stack & Key Tools
 * **Language:** Python 3.10+
