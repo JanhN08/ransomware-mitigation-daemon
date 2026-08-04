@@ -4,7 +4,9 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Linux-orange)
 
-A lightweight host-monitoring daemon engineered in Python to detect and mitigate rapid, unauthorized filesystem encryption (ransomware) in real time using **Shannon Entropy analysi**s over Linux process telemetry.
+A lightweight host-monitoring daemon engineered in Python to detect and mitigate rapid, unauthorized filesystem encryption (ransomware) in real time using **Shannon Entropy analysis** over Linux process telemetry.
+
+---
 
 ## 📌 Architecture & Threat Detection Logic
 
