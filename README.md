@@ -7,35 +7,15 @@
 A lightweight host-monitoring daemon engineered in Python to detect and mitigate rapid, unauthorized filesystem encryption (ransomware) in real time using **Shannon Entropy analysi**s over Linux process telemetry.
 
 ## 📌 Architecture & Threat Detection Logic
-┌────────────────────────────────┐
-│  Active Filesystem Telemetry   │
-└───────────────┬────────────────┘
-│
-▼
-┌────────────────────────────────┐
-│  Linux procfs Event Ingestion  │
-└───────────────┬────────────────┘
-│
-▼
-┌────────────────────────────────┐
-│   Shannon Entropy Calculation  │
-└───────────────┬────────────────┘
-│
-[ > 7.5 Entropy? ]
-/
 
-YES                 NO
-/
-
-▼                       ▼
-┌──────────────────┐  ┌───────────────────┐
-│ Send OS SIGKILL  │  │ Continue Tracking │
-└────────┬─────────┘  └───────────────────┘
-│
-▼
-┌────────────────────────────────┐
-│ Persistent MySQL Forensics Log │
-└────────────────────────────────┘
+```mermaid
+flowchart TD
+    A[Active Filesystem Telemetry] --> B[Linux procfs Event Ingestion]
+    B --> C[Shannon Entropy Calculation]
+    C --> D{Entropy > 7.5?}
+    D -- YES --> E[Send OS SIGKILL to PID]
+    D -- NO --> F[Continue Tracking]
+    E --> G[(Persistent MySQL Forensics Log)]
 
 1. **Host Ingestion:** Audits active file modification threads by continuously inspecting process execution states via the Linux `/proc` filesystem interface (`procfs`).
 2. **Entropy Engine:** Computes mathematical Shannon Entropy ($H = -\sum p_i \log_2 p_i$) across sliding file-write byte streams to catch high-randomness signatures characteristic of symmetric encryption (e.g., AES, ChaCha20).
