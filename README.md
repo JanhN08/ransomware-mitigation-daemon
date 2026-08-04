@@ -18,6 +18,7 @@ flowchart TD
     D -- YES --> E[Send OS SIGKILL to PID]
     D -- NO --> F[Continue Tracking]
     E --> G[(Persistent MySQL Forensics Log)]
+'''
 
 1. **Host Ingestion:** Audits active file modification threads by continuously inspecting process execution states via the Linux `/proc` filesystem interface (`procfs`).
 2. **Entropy Engine:** Computes mathematical Shannon Entropy ($H = -\sum p_i \log_2 p_i$) across sliding file-write byte streams to catch high-randomness signatures characteristic of symmetric encryption (e.g., AES, ChaCha20).
